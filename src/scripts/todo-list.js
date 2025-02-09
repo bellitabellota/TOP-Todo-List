@@ -1,14 +1,13 @@
 import { Todo } from "./todo";
 
 export class TodoList {
-  constructor (name, description = null) {
+  constructor (name) {
     this.name = name;
-    this.description = description;
     this.todos = [];
   }
 
-  static create(name, description) {
-    return new TodoList(name, description);
+  static create(name) {
+    return new TodoList(name);
   }
 
   addTodo(name, details, dueDate, priority) {
