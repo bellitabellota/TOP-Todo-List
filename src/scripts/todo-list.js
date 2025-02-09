@@ -12,7 +12,7 @@ export class TodoList {
   }
 
   addTodo(name, details, dueDate, priority) {
-    const todo = TodoList.create(name, details, dueDate, priority);
-    this.todos.push[todo];
+    const todo = Todo.create(name, details, dueDate, priority);
+    this.todos.push(todo);
   }
 }
