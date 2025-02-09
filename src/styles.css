@@ -1,4 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+/* CSS reset */
+
+:root {
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, figure, p, ol, ul {
+  margin: 0;
+}
+
+ol[role="list"], ul[role="list"] {
+  list-style: none;
+  padding-inline: 0;
+}
+
+h1, h2, h3, h4, h5 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+img {
+  display: block;
+  max-inline-size: 100%;
+}
+
+/*    */
+
+:root {
+  --background-color: 181,134,112;
+}
+
 body {
-  background-color: green;
-;
+  position: relative;
+  min-height: 100vh;
+}
+
+header {
+  background-color: rgb(var(--background-color));
+  height: 5.5vh;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.slogan {
+  font-family: "Pacifico", serif;
+  color: white;
+  font-size: calc(1rem + 0.5vw);
+  text-align: right;
+  margin-right: 1vw;
+}
+
+aside {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 15vw;
+  z-index: -1;
+
+  background-color: rgba(var(--background-color), 0.75);
+  padding: 8vh 0.75vw;
+}
+
+aside h2 {
+  font-size: calc(1rem + 0.25vw);
+  font-weight: 600;
+}
+
+main {
+  min-height: 94.5vh;
+  background-color: rgba(var(--background-color), 0.4);
+  margin-left: 15vw;
+  padding: 0.75vw;
+  overflow: auto;
+}
+
+.lists-container {
+  width: fit-content;
+  display: grid;
+  column-gap: 0.75vw;
+  grid-auto-flow: column;
+  
+}
+
+.list {
+  width: 300px;
+  background-color: rgba(var(--background-color), 0.3);
+  border-radius: 15px;
 }
