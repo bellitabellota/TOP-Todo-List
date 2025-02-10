@@ -1,7 +1,7 @@
 import deleteSvg from "../img/trash-can-outline.svg";
 import pencilSvg from "../img/pencil-outline.svg";
 
-const screenController = (function() {
+const ScreenController = (function() {
   const generateDefaultTodoList = (listCollection) => {
     listCollection.addList("General");
   
@@ -47,4 +47,4 @@ const screenController = (function() {
   return { generateDefaultTodoList, displayLists };
 })();
 
-export default screenController;
+export default ScreenController;
