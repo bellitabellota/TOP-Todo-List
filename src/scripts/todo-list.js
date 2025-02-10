@@ -7,6 +7,9 @@ export class TodoList {
   }
 
   static create(name) {
+    if (name === "") {
+      throw Error('Name property cannot be empty.')
+    }
     return new TodoList(name);
   }
 
