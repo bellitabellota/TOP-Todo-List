@@ -59,22 +59,59 @@ header {
   margin-right: 1vw;
 }
 
+/* Aside styles */
+
 aside {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   width: 15vw;
-  z-index: -1;
-
+  
   background-color: rgba(var(--background-color), 0.75);
   padding: 8vh 0.75vw;
+}
+
+aside form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5vw;
+  padding-bottom: 0.5vw;
+}
+
+.new-list-input {
+  width: 100%;
+  padding-top: 0.25vw;
+  padding-bottom: 0.25vw;
+  border: 1px solid rgb(77, 58, 49);
+  border-radius: 15px;
+  text-align: center;
+  font-size: var(--font-size-MS);
+}
+
+.new-list-button {
+  font-size: var(--font-size-S);
+  color: white;
+  padding: 0.25vw 1vw;
+  border-radius: calc(var(--font-size-XL) / 1.5);
+  border-color: transparent;
+  background-color:  rgb(77, 58, 49);
+  transition: 0.15s;
+  cursor: pointer;
+}
+
+.new-list-button:hover {
+  box-shadow: 2px 2px 3px black;
 }
 
 aside h2 {
   font-size: var(--font-size-ML);
   font-weight: 600;
 }
+
+/* Main styles */
 
 main {
   min-height: 94.5vh;
@@ -190,6 +227,7 @@ main {
   width: 100%;
   margin-top: 0.5vw;
   font-size: var(--font-size-S);
+
   color: white;
   padding-top: 0.25vw;
   padding-bottom: 0.25vw;
