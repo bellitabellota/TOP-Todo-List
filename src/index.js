@@ -2,15 +2,35 @@ import "./styles.css";
 import "modern-normalize";
 import { ListCollection } from "./scripts/list-collection";
 import Screen from "./scripts/screen-controller";
+import { TodoList } from "./scripts/todo-list";
+import { Todo } from "./scripts/todo"
+import { saveToLocalStorage, loadFromLocalStorage } from "./local-Storage";
 
-const listCollection = new ListCollection();
+function initializeListCollection() {
+  const parsedData = loadFromLocalStorage("list collection");
+  if (parsedData) {
+    let listCollection = Object.assign(new ListCollection(), parsedData);
+  
+    listCollection.all = listCollection.all.map((listData) => {
+      const list = Object.assign(new TodoList(), listData);
+      
+      list.todos = list.todos.map((todoData) => Object.assign(new Todo(), todoData));
+      return list;
+    });
+    return listCollection;
+  } else {
+    let listCollection = new ListCollection();
+    Screen.generateDefaultTodoList(listCollection);
+    return listCollection;
+  }
+}
+
+const listCollection = initializeListCollection();
 const listsContainer = document.querySelector(".lists-container");
-
-Screen.generateDefaultTodoList(listCollection);
-Screen.displayLists(listCollection.all, listsContainer);
-
 const newListButton = document.querySelector(".js-new-list-button");
 const newListInput = document.querySelector(".js-new-list-input");
+
+Screen.displayLists(listCollection.all, listsContainer);
 
 newListButton.addEventListener("click", (event) => {
   event.preventDefault();
@@ -22,4 +42,6 @@ newListButton.addEventListener("click", (event) => {
   listCollection.addList(newListInput.value);
   newListInput.value = "";
   Screen.displayLists(listCollection.all, listsContainer);
+
+  saveToLocalStorage("list collection", listCollection);
 })
