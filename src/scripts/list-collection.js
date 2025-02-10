@@ -5,7 +5,7 @@ export class ListCollection {
     this.all = [];
   }
 
-  addList(name, description) {
+  addList(name) {
     const list = TodoList.create(name);
     this.all.push(list);
   }
