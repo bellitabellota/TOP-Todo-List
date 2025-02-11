@@ -13,12 +13,21 @@ const ScreenController = (function() {
     listCollection.all[0].addTodo("High Priority Todos", "Todos with a high priority are displayed in red. The color red unambiguously indicates the urgency of that Todo item.", "2024-04-20", "high");
   }
 
-  const renderLists = (listCollection, listsContainer) => {
+  const renderLists = (listCollection, listsContainer, listTitlesContainer) => {
     listsContainer.innerHTML = generateAllListsHtml(listCollection.all);
 
     const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
     const deleteListAction = listCollection.deleteList.bind(listCollection);
-    addEventListeners(deleteListButtons, deleteListAction, listCollection, listsContainer);
+    addEventListeners(deleteListButtons, deleteListAction, listCollection, listsContainer, listTitlesContainer);
+  };
+
+  const renderListTitles = (listCollection, container) => {
+    container.innerHTML = "";
+    listCollection.all.forEach((list) => {
+      const listTitleElement = document.createElement("p");
+      listTitleElement.textContent = `${list.name}`;
+      container.append(listTitleElement);
+    });
   };
 
   const generateAllListsHtml = lists => {
@@ -55,19 +64,20 @@ const ScreenController = (function() {
             </div>`;
   };
 
-  const addEventListeners = (nodeList, action, listCollection, listsContainer) => {
+  const addEventListeners = (nodeList, action, listCollection, listsContainer, listTitlesContainer) => {
     nodeList.forEach((node) => {
       node.addEventListener("click", () => {
         console.log(node.dataset.listIndex);
         
         action(node.dataset.listIndex);
-        renderLists(listCollection, listsContainer);
+        renderLists(listCollection, listsContainer, listTitlesContainer);
+        renderListTitles(listCollection, listTitlesContainer);
         saveToLocalStorage("list collection", listCollection);
       });
     });
   }
 
-  return { generateDefaultTodoList, renderLists };
+  return { generateDefaultTodoList, renderLists, renderListTitles };
 })();
 
 export default ScreenController;
