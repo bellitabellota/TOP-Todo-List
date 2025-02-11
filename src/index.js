@@ -11,7 +11,7 @@ const listsContainer = document.querySelector(".lists-container");
 const newListButton = document.querySelector(".js-new-list-button");
 const newListInput = document.querySelector(".js-new-list-input");
 
-Screen.displayLists(listCollection, listsContainer);
+Screen.renderLists(listCollection, listsContainer);
 
 
 
@@ -43,7 +43,7 @@ newListButton.addEventListener("click", (event) => {
 
   listCollection.addList(newListInput.value);
   newListInput.value = "";
-  Screen.displayLists(listCollection, listsContainer);
+  Screen.renderLists(listCollection, listsContainer);
 
   saveToLocalStorage("list collection", listCollection);
 })

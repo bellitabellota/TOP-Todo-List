@@ -13,43 +13,47 @@ const ScreenController = (function() {
     listCollection.all[0].addTodo("High Priority Todos", "Todos with a high priority are displayed in red. The color red unambiguously indicates the urgency of that Todo item.", "2024-04-20", "high");
   }
 
-  const displayLists = (listCollection, listsContainer) => {
-    let listHTML = "";
-    const lists = listCollection.all;
-    
-    lists.forEach((list, listIndex) => {
-      let listBodyHtml = "";
-      list.todos.forEach( todo => {
-        listBodyHtml += 
-          `<div class="todo ${todo.priority}">
-            <p class="todo-name">${todo.name}</p>
-            <p class="todo-due-date">${todo.dueDate}</p>
-            <p class="todo-details">${todo.details}</p>
-            <button class="edit-button"><img src="${pencilSvg}"></button>
-          </div>
-        `;
-      });
-  
-      listHTML += 
-        `<div class="list">
-          <div class="list-heading-container">
-            <h2>${list.name}</h2>
-            <button class="delete-button js-delete-list-button" data-list-index=${listIndex}><img src="${deleteSvg}" alt="delete-icon"></button>
-          </div>
-          <hr>
-          <div class="list-body">${listBodyHtml}</div>
-          <button class="new-todo-button">Add Todo</button>
-        </div>
-        `;
-    })
-    
-    listsContainer.innerHTML = listHTML;
+  const renderLists = (listCollection, listsContainer) => {
+    listsContainer.innerHTML = generateAllListsHtml(listCollection.all);
 
     const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
     const deleteListAction = listCollection.deleteList.bind(listCollection);
     addEventListeners(deleteListButtons, deleteListAction, listCollection, listsContainer);
+  };
 
-  }
+  const generateAllListsHtml = lists => {
+    let listHTML = "";
+
+    lists.forEach((list, listIndex) => {
+      let listBodyHtml = "";
+      list.todos.forEach( todo => listBodyHtml += generateTodoHtml(todo));
+
+      listHTML += generateListHtml(list, listIndex, listBodyHtml);
+    })
+
+    return listHTML;
+  };
+
+  const generateListHtml = (list, listIndex, listBodyHtml) => {
+    return `<div class="list">
+            <div class="list-heading-container">
+              <h2>${list.name}</h2>
+              <button class="delete-button js-delete-list-button" data-list-index=${listIndex}><img src="${deleteSvg}" alt="delete-icon"></button>
+            </div>
+            <hr>
+            <div class="list-body">${listBodyHtml}</div>
+            <button class="new-todo-button">Add Todo</button>
+          </div>`;
+  };
+
+  const generateTodoHtml = todo => {
+    return `<div class="todo ${todo.priority}">
+              <p class="todo-name">${todo.name}</p>
+              <p class="todo-due-date">${todo.dueDate}</p>
+              <p class="todo-details">${todo.details}</p>
+              <button class="edit-button"><img src="${pencilSvg}"></button>
+            </div>`;
+  };
 
   const addEventListeners = (nodeList, action, listCollection, listsContainer) => {
     nodeList.forEach((node) => {
@@ -57,13 +61,13 @@ const ScreenController = (function() {
         console.log(node.dataset.listIndex);
         
         action(node.dataset.listIndex);
-        displayLists(listCollection, listsContainer);
+        renderLists(listCollection, listsContainer);
         saveToLocalStorage("list collection", listCollection);
       });
     });
   }
 
-  return { generateDefaultTodoList, displayLists };
+  return { generateDefaultTodoList, renderLists };
 })();
 
 export default ScreenController;
