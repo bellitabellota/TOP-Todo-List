@@ -11,8 +11,15 @@ const listsContainer = document.querySelector(".lists-container");
 const newListButton = document.querySelector(".js-new-list-button");
 const newListInput = document.querySelector(".js-new-list-input");
 const listTitlesContainer = document.querySelector(".js-list-titles");
+const dialog = document.querySelector(".js-todo-dialog");
+const createTodoButton = document.querySelector(".js-create-todo-button")
 
-const screenController = new ScreenController(listCollection, listsContainer, listTitlesContainer);
+const name = document.querySelector(".js-todo-name");
+const details = document.querySelector(".js-todo-details");
+const dueDate = document.querySelector(".js-todo-due-date");
+const hiddenListIndex = document.querySelector(".js-hidden-list-index");
+
+const screenController = new ScreenController(listCollection, listsContainer, listTitlesContainer, dialog, hiddenListIndex);
 
 screenController.renderLists();
 screenController.renderListTitles();
@@ -37,6 +44,32 @@ function initializeListCollection() {
     return listCollection;
   }
 }
+
+createTodoButton.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  const priority = document.querySelector('input[name="priority"]:checked')
+  console.log(name.value);
+  console.log(details.value);
+  console.log(dueDate.value);
+  console.log(priority.value);
+  console.log(hiddenListIndex.value);
+
+  listCollection.all[hiddenListIndex.value].addTodo(name.value, details.value, dueDate.value, priority.value);
+
+  name.value = "";
+  details.value = "";
+  dueDate.value = "";
+  document.querySelector('input[name="priority"][value="low"]').checked = true;
+  dialog.close();
+
+
+ /*  dont forget to reset the field values and close modal, then make date  a date object and add validations */
+  screenController.renderLists();
+  screenController.renderListTitles();
+
+  saveToLocalStorage("list collection", listCollection);
+});
 
 newListButton.addEventListener("click", (event) => {
   event.preventDefault();
