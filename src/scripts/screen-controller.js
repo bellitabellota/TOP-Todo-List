@@ -3,10 +3,12 @@ import pencilSvg from "../img/pencil-outline.svg";
 import { saveToLocalStorage } from "../local-Storage";
 
 class ScreenController {
-  constructor(listCollection, listsContainer, listTitlesContainer) {
+  constructor(listCollection, listsContainer, listTitlesContainer, dialog, hiddenListIndex) {
     this.listCollection = listCollection;
     this.listsContainer = listsContainer;
     this.listTitlesContainer = listTitlesContainer;
+    this.dialog = dialog;
+    this.hiddenListIndex = hiddenListIndex;
   }
 
   generateDefaultTodoList() {
@@ -23,8 +25,15 @@ class ScreenController {
     this.listsContainer.innerHTML = this.generateAllListsHtml(this.listCollection.all);
 
     const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
-
     this.addEventListeners(deleteListButtons, this.listCollection.deleteList.bind(this.listCollection));
+
+    const newTodoButtons = document.querySelectorAll(".js-new-todo-button");
+    newTodoButtons.forEach((newTodoButton) => {
+      newTodoButton.addEventListener("click", () => {
+        this.hiddenListIndex.value = newTodoButton.dataset.listIndex;
+        this.dialog.showModal();
+      });
+    });
   };
 
   renderListTitles() {
@@ -57,7 +66,7 @@ class ScreenController {
             </div>
             <hr>
             <div class="list-body">${listBodyHtml}</div>
-            <button class="new-todo-button">Add Todo</button>
+            <button class="new-todo-button js-new-todo-button" data-list-index=${listIndex}>Add Todo</button>
           </div>`;
   };
 
