@@ -2,48 +2,54 @@ import deleteSvg from "../img/trash-can-outline.svg";
 import pencilSvg from "../img/pencil-outline.svg";
 import { saveToLocalStorage } from "../local-Storage";
 
-const ScreenController = (function() {
-  const generateDefaultTodoList = (listCollection) => {
-    listCollection.addList("General");
-  
-    listCollection.all[0].addTodo("Low Priority Todos", "Low Priority Todos are displayed with a yellow background color. The color yellow stands for happiness, optimism and hope.", "2024-04-20", "low");
-  
-    listCollection.all[0].addTodo("Medium Priority Todos", "Todos with a medium priority are displayed in orange. Orange signals warmth and comfort.", "2024-04-20", "medium");
-  
-    listCollection.all[0].addTodo("High Priority Todos", "Todos with a high priority are displayed in red. The color red unambiguously indicates the urgency of that Todo item.", "2024-04-20", "high");
+class ScreenController {
+  constructor(listCollection, listsContainer, listTitlesContainer) {
+    this.listCollection = listCollection;
+    this.listsContainer = listsContainer;
+    this.listTitlesContainer = listTitlesContainer;
   }
 
-  const renderLists = (listCollection, listsContainer, listTitlesContainer) => {
-    listsContainer.innerHTML = generateAllListsHtml(listCollection.all);
+  generateDefaultTodoList() {
+    this.listCollection.addList("General");
+  
+    this.listCollection.all[0].addTodo("Low Priority Todos", "Low Priority Todos are displayed with a yellow background color. The color yellow stands for happiness, optimism and hope.", "2024-04-20", "low");
+  
+    this.listCollection.all[0].addTodo("Medium Priority Todos", "Todos with a medium priority are displayed in orange. Orange signals warmth and comfort.", "2024-04-20", "medium");
+  
+    this.listCollection.all[0].addTodo("High Priority Todos", "Todos with a high priority are displayed in red. The color red unambiguously indicates the urgency of that Todo item.", "2024-04-20", "high");
+  }
+
+  renderLists() {
+    this.listsContainer.innerHTML = this.generateAllListsHtml(this.listCollection.all);
 
     const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
-    const deleteListAction = listCollection.deleteList.bind(listCollection);
-    addEventListeners(deleteListButtons, deleteListAction, listCollection, listsContainer, listTitlesContainer);
+
+    this.addEventListeners(deleteListButtons, this.listCollection.deleteList.bind(this.listCollection));
   };
 
-  const renderListTitles = (listCollection, container) => {
-    container.innerHTML = "";
-    listCollection.all.forEach((list) => {
+  renderListTitles() {
+    this.listTitlesContainer.innerHTML = "";
+    this.listCollection.all.forEach((list) => {
       const listTitleElement = document.createElement("p");
       listTitleElement.textContent = `${list.name}`;
-      container.append(listTitleElement);
+      this.listTitlesContainer.append(listTitleElement);
     });
   };
 
-  const generateAllListsHtml = lists => {
+  generateAllListsHtml(lists) {
     let listHTML = "";
 
     lists.forEach((list, listIndex) => {
       let listBodyHtml = "";
-      list.todos.forEach( todo => listBodyHtml += generateTodoHtml(todo));
+      list.todos.forEach( todo => listBodyHtml += this.generateTodoHtml(todo));
 
-      listHTML += generateListHtml(list, listIndex, listBodyHtml);
+      listHTML += this.generateListHtml(list, listIndex, listBodyHtml);
     })
 
     return listHTML;
   };
 
-  const generateListHtml = (list, listIndex, listBodyHtml) => {
+  generateListHtml(list, listIndex, listBodyHtml) {
     return `<div class="list">
             <div class="list-heading-container">
               <h2>${list.name}</h2>
@@ -55,7 +61,7 @@ const ScreenController = (function() {
           </div>`;
   };
 
-  const generateTodoHtml = todo => {
+  generateTodoHtml(todo) {
     return `<div class="todo ${todo.priority}">
               <p class="todo-name">${todo.name}</p>
               <p class="todo-due-date">${todo.dueDate}</p>
@@ -64,20 +70,16 @@ const ScreenController = (function() {
             </div>`;
   };
 
-  const addEventListeners = (nodeList, action, listCollection, listsContainer, listTitlesContainer) => {
+  addEventListeners(nodeList, action) {
     nodeList.forEach((node) => {
       node.addEventListener("click", () => {
-        console.log(node.dataset.listIndex);
-        
         action(node.dataset.listIndex);
-        renderLists(listCollection, listsContainer, listTitlesContainer);
-        renderListTitles(listCollection, listTitlesContainer);
-        saveToLocalStorage("list collection", listCollection);
+        this.renderLists();
+        this.renderListTitles();
+        saveToLocalStorage("list collection", this.listCollection);
       });
     });
   }
-
-  return { generateDefaultTodoList, renderLists, renderListTitles };
-})();
+};
 
 export default ScreenController;

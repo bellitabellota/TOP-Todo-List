@@ -1,7 +1,7 @@
 import "./styles.css";
 import "modern-normalize";
 import { ListCollection } from "./scripts/list-collection";
-import Screen from "./scripts/screen-controller";
+import ScreenController from "./scripts/screen-controller";
 import { TodoList } from "./scripts/todo-list";
 import { Todo } from "./scripts/todo"
 import { saveToLocalStorage, loadFromLocalStorage } from "./local-Storage";
@@ -12,8 +12,10 @@ const newListButton = document.querySelector(".js-new-list-button");
 const newListInput = document.querySelector(".js-new-list-input");
 const listTitlesContainer = document.querySelector(".js-list-titles");
 
-Screen.renderLists(listCollection, listsContainer, listTitlesContainer);
-Screen.renderListTitles(listCollection, listTitlesContainer);
+const screenController = new ScreenController(listCollection, listsContainer, listTitlesContainer);
+
+screenController.renderLists();
+screenController.renderListTitles();
 
 
 
@@ -31,7 +33,7 @@ function initializeListCollection() {
     return listCollection;
   } else {
     let listCollection = new ListCollection();
-    Screen.generateDefaultTodoList(listCollection);
+    screenController.generateDefaultTodoList();
     return listCollection;
   }
 }
@@ -45,8 +47,8 @@ newListButton.addEventListener("click", (event) => {
 
   listCollection.addList(newListInput.value);
   newListInput.value = "";
-  Screen.renderLists(listCollection, listsContainer, listTitlesContainer);
-  Screen.renderListTitles(listCollection, listTitlesContainer);
+  screenController.renderLists();
+  screenController.renderListTitles();
 
   saveToLocalStorage("list collection", listCollection);
 })
