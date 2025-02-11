@@ -1,5 +1,6 @@
 import deleteSvg from "../img/trash-can-outline.svg";
 import pencilSvg from "../img/pencil-outline.svg";
+import { saveToLocalStorage } from "../local-Storage";
 
 const ScreenController = (function() {
   const generateDefaultTodoList = (listCollection) => {
@@ -12,10 +13,11 @@ const ScreenController = (function() {
     listCollection.all[0].addTodo("High Priority Todos", "Todos with a high priority are displayed in red. The color red unambiguously indicates the urgency of that Todo item.", "2024-04-20", "high");
   }
 
-  const displayLists = (lists, listsContainer) => {
+  const displayLists = (listCollection, listsContainer) => {
     let listHTML = "";
+    const lists = listCollection.all;
     
-    lists.forEach(list => {
+    lists.forEach((list, listIndex) => {
       let listBodyHtml = "";
       list.todos.forEach( todo => {
         listBodyHtml += 
@@ -26,22 +28,39 @@ const ScreenController = (function() {
             <button class="edit-button"><img src="${pencilSvg}"></button>
           </div>
         `;
-    });
+      });
   
-    listHTML += 
-      `<div class="list">
-        <div class="list-heading-container">
-          <h2>${list.name}</h2>
-          <button class="delete-button"><img src="${deleteSvg}" alt="delete-icon"></button>
+      listHTML += 
+        `<div class="list">
+          <div class="list-heading-container">
+            <h2>${list.name}</h2>
+            <button class="delete-button js-delete-list-button" data-list-index=${listIndex}><img src="${deleteSvg}" alt="delete-icon"></button>
+          </div>
+          <hr>
+          <div class="list-body">${listBodyHtml}</div>
+          <button class="new-todo-button">Add Todo</button>
         </div>
-        <hr>
-        <div class="list-body">${listBodyHtml}</div>
-        <button class="new-todo-button">Add Todo</button>
-      </div>
-      `;
+        `;
     })
-  
+    
     listsContainer.innerHTML = listHTML;
+
+    const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
+    const deleteListAction = listCollection.deleteList.bind(listCollection);
+    addEventListeners(deleteListButtons, deleteListAction, listCollection, listsContainer);
+
+  }
+
+  const addEventListeners = (nodeList, action, listCollection, listsContainer) => {
+    nodeList.forEach((node) => {
+      node.addEventListener("click", () => {
+        console.log(node.dataset.listIndex);
+        
+        action(node.dataset.listIndex);
+        displayLists(listCollection, listsContainer);
+        saveToLocalStorage("list collection", listCollection);
+      });
+    });
   }
 
   return { generateDefaultTodoList, displayLists };

@@ -6,6 +6,15 @@ import { TodoList } from "./scripts/todo-list";
 import { Todo } from "./scripts/todo"
 import { saveToLocalStorage, loadFromLocalStorage } from "./local-Storage";
 
+const listCollection = initializeListCollection();
+const listsContainer = document.querySelector(".lists-container");
+const newListButton = document.querySelector(".js-new-list-button");
+const newListInput = document.querySelector(".js-new-list-input");
+
+Screen.displayLists(listCollection, listsContainer);
+
+
+
 function initializeListCollection() {
   const parsedData = loadFromLocalStorage("list collection");
   if (parsedData) {
@@ -25,13 +34,6 @@ function initializeListCollection() {
   }
 }
 
-const listCollection = initializeListCollection();
-const listsContainer = document.querySelector(".lists-container");
-const newListButton = document.querySelector(".js-new-list-button");
-const newListInput = document.querySelector(".js-new-list-input");
-
-Screen.displayLists(listCollection.all, listsContainer);
-
 newListButton.addEventListener("click", (event) => {
   event.preventDefault();
 
@@ -41,7 +43,7 @@ newListButton.addEventListener("click", (event) => {
 
   listCollection.addList(newListInput.value);
   newListInput.value = "";
-  Screen.displayLists(listCollection.all, listsContainer);
+  Screen.displayLists(listCollection, listsContainer);
 
   saveToLocalStorage("list collection", listCollection);
 })

@@ -9,4 +9,8 @@ export class ListCollection {
     const list = TodoList.create(name);
     this.all.push(list);
   }
+
+  deleteList(index){
+    this.all.splice(index, 1);
+  }
 }
