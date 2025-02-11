@@ -21,6 +21,10 @@ const hiddenListIndex = document.querySelector(".js-hidden-list-index");
 
 const screenController = new ScreenController(listCollection, listsContainer, listTitlesContainer, dialog, hiddenListIndex);
 
+if (!loadFromLocalStorage("list collection")) {
+  screenController.generateDefaultTodoList();
+}
+
 screenController.renderLists();
 screenController.renderListTitles();
 
@@ -40,7 +44,6 @@ function initializeListCollection() {
     return listCollection;
   } else {
     let listCollection = new ListCollection();
-    screenController.generateDefaultTodoList();
     return listCollection;
   }
 }
@@ -63,8 +66,6 @@ createTodoButton.addEventListener("click", (event) => {
   document.querySelector('input[name="priority"][value="low"]').checked = true;
   dialog.close();
 
-
- /*  dont forget to reset the field values and close modal, then make date  a date object and add validations */
   screenController.renderLists();
   screenController.renderListTitles();
 
