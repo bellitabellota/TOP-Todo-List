@@ -1,6 +1,7 @@
 import deleteSvg from "../img/trash-can-outline.svg";
 import pencilSvg from "../img/pencil-outline.svg";
 import { saveToLocalStorage } from "../local-Storage";
+import { format } from 'date-fns';
 
 class ScreenController {
   constructor(listCollection, listsContainer, listTitlesContainer, dialog, hiddenListIndex) {
@@ -73,7 +74,7 @@ class ScreenController {
   generateTodoHtml(todo) {
     return `<div class="todo ${todo.priority}">
               <p class="todo-name">${todo.name}</p>
-              <p class="todo-due-date">${todo.dueDate}</p>
+              <p class="todo-due-date">${format(todo.dueDate, "dd-MM-yyy")}</p>
               <p class="todo-details">${todo.details}</p>
               <button class="edit-button"><img src="${pencilSvg}"></button>
             </div>`;
