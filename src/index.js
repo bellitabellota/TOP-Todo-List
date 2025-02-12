@@ -96,8 +96,11 @@ createTodoButton.addEventListener("click", (event) => {
   if(!isFormInputValid(name.value, dueDate.value)) {
     return;
   }
+console.log("date object:")
+  console.log(new Date(dueDate.value));
+  console.log(typeof(new Date(dueDate.value)));
 
-  listCollection.all[hiddenListIndex.value].addTodo(name.value, details.value, dueDate.value, priority.value);
+  listCollection.all[hiddenListIndex.value].addTodo(name.value, details.value, new Date(dueDate.value), priority.value);
 
   name.value = "";
   details.value = "";
