@@ -7,6 +7,18 @@ export class Todo {
   }
 
   static create(name, details, dueDate, priority) {
+    if (name === "") {
+      throw Error('Name property cannot be empty.')
+    }
+
+    if (dueDate === "") {
+      throw Error('Due Date property cannot be empty.')
+    }
+
+    if (!dueDate instanceof Date) {
+      throw Error('Due Date must be a valid Date object.');
+    }
+
     return new Todo(name, details, dueDate, priority);
   }
 }
