@@ -87,18 +87,10 @@ createTodoButton.addEventListener("click", (event) => {
   event.preventDefault();
 
   const priority = document.querySelector('input[name="priority"]:checked')
-  console.log(name.value);
-  console.log(details.value);
-  console.log(dueDate.value);
-  console.log(priority.value);
-  console.log(hiddenListIndex.value);
 
   if(!isFormInputValid(name.value, dueDate.value)) {
     return;
   }
-console.log("date object:")
-  console.log(new Date(dueDate.value));
-  console.log(typeof(new Date(dueDate.value)));
 
   listCollection.all[hiddenListIndex.value].addTodo(name.value, details.value, new Date(dueDate.value), priority.value);
 
