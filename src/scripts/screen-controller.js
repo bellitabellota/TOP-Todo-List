@@ -65,6 +65,21 @@ class ScreenController {
         this.renderTodoFormWith({todo: todo, listIndex: editTodoButton.dataset.listIndex, todoIndex: editTodoButton.dataset.todoIndex});
       });
     });
+
+    const removeTodoButtons = document.querySelectorAll(".js-remove-todo-button");
+    removeTodoButtons.forEach((removeTodoButton) => {
+      removeTodoButton.addEventListener("click", () => {
+        const todoIndex = removeTodoButton.dataset.todoIndex;
+        const todos = this.listCollection.all[removeTodoButton.dataset.listIndex].todos;
+
+        todos.splice(todoIndex, 1);
+        
+        this.renderLists();
+        this.renderListTitles();
+        saveToLocalStorage("list collection", this.listCollection);
+        
+      });
+    });
   };
   
   renderListTitles() {
