@@ -32,6 +32,13 @@ class ScreenController {
     this.listCollection.all[0].addTodo("High Priority Todos", "Todos with a high priority are displayed in red. The color red unambiguously indicates the urgency of that Todo item.", new Date("2024-04-20"), "high");
   }
 
+  buildUI() {
+    this.renderLists();
+    this.renderListTitles();
+    this.addNewListButtonEventListener()
+    this.addCreateTodoButtonEventListener();
+  }
+
   renderLists() {
     this.listsContainer.innerHTML = this.generateAllListsHtml(this.listCollection.all);
 
@@ -205,10 +212,6 @@ addCreateTodoButtonEventListener() {
   if(!this.isFormInputValid(this.name.value, this.dueDate.value)) {
     return;
   }
-
-
- /*  console.log(this.dueDate.value); */
-  console.log(priority.value);
 
   this.listCollection.all[this.hiddenListIndex.value].addTodo(this.name.value, this.details.value, new Date(this.dueDate.value), priority.value);
 

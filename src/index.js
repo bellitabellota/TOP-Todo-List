@@ -14,12 +14,7 @@ if (!loadFromLocalStorage("list collection")) {
   screenController.generateDefaultTodoList();
 }
 
-screenController.renderLists();
-screenController.renderListTitles();
-screenController.addNewListButtonEventListener()
-screenController.addCreateTodoButtonEventListener();
-
-
+screenController.buildUI();
 
 function initializeListCollection() {
   const parsedData = loadFromLocalStorage("list collection");
