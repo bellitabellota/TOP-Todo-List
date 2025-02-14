@@ -15,7 +15,7 @@ export class Todo {
       throw Error('Due Date property cannot be empty.')
     }
 
-    if (!dueDate instanceof Date) {
+    if (!(dueDate instanceof Date)) {
       throw Error('Due Date must be a valid Date object.');
     }
 
