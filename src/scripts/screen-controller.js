@@ -35,6 +35,45 @@ class ScreenController {
         this.dialog.showModal();
       });
     });
+
+    const editTodoButtons = document.querySelectorAll(".js-edit-todo-button");
+    editTodoButtons.forEach((editTodoButton) => {
+      editTodoButton.addEventListener("click", () => {
+
+        const todo = this.listCollection.all[editTodoButton.dataset.listIndex].todos[editTodoButton.dataset.todoIndex];
+        console.log(todo);
+
+        this.dialog.showModal();
+
+        this.displayFormForTodo(todo, editTodoButton.dataset.listIndex, editTodoButton.dataset.todoIndex);
+        
+        /* when dialog is save Form input needs to be validated and saved */
+      });
+    });
+  };
+
+  displayFormForTodo(todo, listIndex, todoIndex) {
+    const name = document.querySelector(".js-todo-name");
+    const details = document.querySelector(".js-todo-details");
+
+    const dueDate = document.querySelector(".js-todo-due-date");
+    const hiddenListIndex = document.querySelector(".js-hidden-list-index");
+    const hiddenTodoIndex = document.querySelector(".js-hidden-todo-index");
+    /* const formErrors = document.querySelector(".js-form-errors"); */
+
+    hiddenListIndex.value = listIndex;
+    hiddenTodoIndex.value = todoIndex;
+    name.value = todo.name;
+    details.value = todo.details;
+    dueDate.value = format(todo.dueDate, "yyyy-MM-dd");
+
+
+    const priorityRadios = document.querySelectorAll('input[name="priority"]');
+    priorityRadios.forEach(radio => {
+        if (radio.value === todo.priority) {
+          radio.checked = true;
+        }
+    });
   };
 
   renderListTitles() {
@@ -51,7 +90,7 @@ class ScreenController {
 
     lists.forEach((list, listIndex) => {
       let listBodyHtml = "";
-      list.todos.forEach( todo => listBodyHtml += this.generateTodoHtml(todo));
+      list.todos.forEach( (todo, todoIndex) => listBodyHtml += this.generateTodoHtml(todo, listIndex, todoIndex));
 
       listHTML += this.generateListHtml(list, listIndex, listBodyHtml);
     })
@@ -71,12 +110,12 @@ class ScreenController {
           </div>`;
   };
 
-  generateTodoHtml(todo) {
+  generateTodoHtml(todo, listIndex, todoIndex) {
     return `<div class="todo ${todo.priority}">
               <p class="todo-name">${todo.name}</p>
               <p class="todo-due-date">${format(todo.dueDate, "dd-MM-yyy")}</p>
               <p class="todo-details">${todo.details}</p>
-              <button class="edit-button"><img src="${pencilSvg}"></button>
+              <button class="edit-button js-edit-todo-button" data-list-index=${listIndex} data-todo-index=${todoIndex}><img src="${pencilSvg}"></button>
             </div>`;
   };
 
