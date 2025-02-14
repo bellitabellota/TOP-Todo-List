@@ -10,16 +10,17 @@ class ScreenController {
     this.listTitlesContainer = document.querySelector(".js-list-titles");
     this.dialog = document.querySelector(".js-todo-dialog");
     this.hiddenListIndex = document.querySelector(".js-hidden-list-index");
+    this.hiddenTodoIndex = document.querySelector(".js-hidden-todo-index");
 
     this.newListButton = document.querySelector(".js-new-list-button");
     this.newListInput = document.querySelector(".js-new-list-input");
     
     this.createTodoButton = document.querySelector(".js-create-todo-button")
     
-    this.name = document.querySelector(".js-todo-name");
-    this.details = document.querySelector(".js-todo-details");
-    this.dueDate = document.querySelector(".js-todo-due-date");
-    this.formErrors = document.querySelector(".js-form-errors");
+    this.todoNameInput = document.querySelector(".js-todo-name");
+    this.todoDetailsInput = document.querySelector(".js-todo-details");
+    this.todoDueDateInput = document.querySelector(".js-todo-due-date");
+    this.todoFormErrors = document.querySelector(".js-form-errors");
   }
 
   generateDefaultTodoList() {
@@ -70,19 +71,14 @@ class ScreenController {
   };
 
   displayFormForTodo(todo, listIndex, todoIndex) {
-    const name = document.querySelector(".js-todo-name");
-    const details = document.querySelector(".js-todo-details");
-
-    const dueDate = document.querySelector(".js-todo-due-date");
-    const hiddenListIndex = document.querySelector(".js-hidden-list-index");
-    const hiddenTodoIndex = document.querySelector(".js-hidden-todo-index");
+    
     /* const formErrors = document.querySelector(".js-form-errors"); */
 
-    hiddenListIndex.value = listIndex;
-    hiddenTodoIndex.value = todoIndex;
-    name.value = todo.name;
-    details.value = todo.details;
-    dueDate.value = format(todo.dueDate, "yyyy-MM-dd");
+    this.hiddenListIndex.value = listIndex;
+    this.hiddenTodoIndex.value = todoIndex;
+    this.todoNameInput.value = todo.name;
+    this.todoDetailsInput.value = todo.details;
+    this.todoDueDateInput.value = format(todo.dueDate, "yyyy-MM-dd");
 
 
     const priorityRadios = document.querySelectorAll('input[name="priority"]');
@@ -190,13 +186,13 @@ displayFormErrors(errors) {
 }
 
 isFormInputValid(nameValue, dateValue) {
-  this.formErrors.innerHTML = "";
+  this.todoFormErrors.innerHTML = "";
   let valid = true;
 
   const errors = this.validateFormInput(nameValue, dateValue);
 
   if (errors.length > 0) {
-    this.formErrors.innerHTML = this.displayFormErrors(errors);
+    this.todoFormErrors.innerHTML = this.displayFormErrors(errors);
     valid = false;
   }
 
@@ -209,15 +205,15 @@ addCreateTodoButtonEventListener() {
 
   const priority = document.querySelector('input[name="priority"]:checked')
 
-  if(!this.isFormInputValid(this.name.value, this.dueDate.value)) {
+  if(!this.isFormInputValid(this.todoNameInput.value, this.todoDueDateInput.value)) {
     return;
   }
 
-  this.listCollection.all[this.hiddenListIndex.value].addTodo(this.name.value, this.details.value, new Date(this.dueDate.value), priority.value);
+  this.listCollection.all[this.hiddenListIndex.value].addTodo(this.todoNameInput.value, this.todoDetailsInput.value, new Date(this.todoDueDateInput.value), priority.value);
 
-  this.name.value = "";
-  this.details.value = "";
-  this.dueDate.value = "";
+  this.todoNameInput.value = "";
+  this.todoDetailsInput.value = "";
+  this.todoDueDateInput.value = "";
   document.querySelector('input[name="priority"][value="low"]').checked = true;
   this.dialog.close();
 
