@@ -1,6 +1,6 @@
 import deleteSvg from "../img/trash-can-outline.svg";
 import pencilSvg from "../img/pencil-outline.svg";
-import { saveToLocalStorage } from "../local-Storage";
+import { saveToLocalStorage } from "./local-storage";
 import { format } from 'date-fns';
 
 class ScreenController {

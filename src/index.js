@@ -4,7 +4,7 @@ import { ListCollection } from "./scripts/list-collection";
 import ScreenController from "./scripts/screen-controller";
 import { TodoList } from "./scripts/todo-list";
 import { Todo } from "./scripts/todo"
-import { loadFromLocalStorage } from "./local-Storage";
+import { loadFromLocalStorage } from "./scripts/local-storage";
 
 const listCollection = initializeListCollection();
 
