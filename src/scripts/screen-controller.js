@@ -1,5 +1,6 @@
 import deleteSvg from "../img/trash-can-outline.svg";
 import pencilSvg from "../img/pencil-outline.svg";
+import removeSvg from "../img/minus-box-outline.svg";
 import { saveToLocalStorage } from "./local-storage";
 import { format } from 'date-fns';
 
@@ -105,7 +106,10 @@ class ScreenController {
               <p class="todo-name">${todo.name}</p>
               <p class="todo-due-date">${format(todo.dueDate, "dd-MM-yyy")}</p>
               <p class="todo-details">${todo.details}</p>
-              <button class="edit-button js-edit-todo-button" data-list-index=${listIndex} data-todo-index=${todoIndex}><img src="${pencilSvg}"></button>
+              <div class="todo-buttons">
+                <button class="edit-button js-edit-todo-button" data-list-index=${listIndex} data-todo-index=${todoIndex}><img src="${pencilSvg}"></button>
+                <button class="remove-todo-button js-remove-todo-button" data-list-index=${listIndex} data-todo-index=${todoIndex}><img src="${removeSvg}"></button>
+              </div>
             </div>`;
   };
 

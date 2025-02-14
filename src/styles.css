@@ -207,7 +207,15 @@ main {
   font-size: var(--font-size-S);
 }
 
-.edit-button {
+.todo-buttons {
+  width: fit-content;
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 0.25vw;
+}
+
+.edit-button, .remove-todo-button {
   width: var(--font-size-L);
   height: var(--font-size-L);
   padding: 0;
@@ -216,10 +224,9 @@ main {
   border-radius: calc(var(--font-size-ML) / 2);
   transition: 0.15s;
   cursor: pointer;
-  align-self: flex-end;
 }
 
-.edit-button:hover {
+.edit-button:hover, .remove-todo-button:hover {
   box-shadow: var(--icon-hover-shadow);
 }
 
