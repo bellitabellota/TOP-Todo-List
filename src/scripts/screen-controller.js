@@ -203,7 +203,15 @@ addSaveTodoButtonEventListener() {
     return;
   }
 
-  this.listCollection.all[this.hiddenListIndex.value].addTodo(this.todoNameInput.value, this.todoDetailsInput.value, new Date(this.todoDueDateInput.value), selectedPriority.value);
+  if (this.listCollection.all[this.hiddenListIndex.value].todos[this.hiddenTodoIndex.value]) {
+    const todoInEdit = this.listCollection.all[this.hiddenListIndex.value].todos[this.hiddenTodoIndex.value];
+    todoInEdit.name = this.todoNameInput.value;
+    todoInEdit.details = this.todoDetailsInput.value;
+    todoInEdit.dueDate = new Date(this.todoDueDateInput.value);
+    todoInEdit.priority = selectedPriority.value;
+  } else {
+    this.listCollection.all[this.hiddenListIndex.value].addTodo(this.todoNameInput.value, this.todoDetailsInput.value, new Date(this.todoDueDateInput.value), selectedPriority.value);
+  }
 
   this.dialog.close();
 
