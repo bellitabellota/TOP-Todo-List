@@ -15,7 +15,7 @@ class ScreenController {
     this.newListButton = document.querySelector(".js-new-list-button");
     this.newListInput = document.querySelector(".js-new-list-input");
     
-    this.createTodoButton = document.querySelector(".js-save-todo-button")
+    this.saveTodoButton = document.querySelector(".js-save-todo-button")
     
     this.todoNameInput = document.querySelector(".js-todo-name");
     this.todoDetailsInput = document.querySelector(".js-todo-details");
@@ -39,7 +39,7 @@ class ScreenController {
     this.renderListTitles();
     this.dialog.addEventListener("close", () => { this.renderTodoFormWith();});
     this.addNewListButtonEventListener()
-    this.addCreateTodoButtonEventListener();
+    this.addSaveTodoButtonEventListener();
   }
 
   renderLists() {
@@ -62,8 +62,6 @@ class ScreenController {
         const todo = this.listCollection.all[editTodoButton.dataset.listIndex].todos[editTodoButton.dataset.todoIndex];
         this.dialog.showModal();
         this.renderTodoFormWith({todo: todo, listIndex: editTodoButton.dataset.listIndex, todoIndex: editTodoButton.dataset.todoIndex});
-        
-        /* when dialog is save Form input needs to be validated and saved */
       });
     });
   };
@@ -195,8 +193,8 @@ renderTodoFormWith({todo = {name: "", details: "", dueDate: "", priority: "low" 
   });
 };
 
-addCreateTodoButtonEventListener() {
-  this.createTodoButton.addEventListener("click", (event) => {
+addSaveTodoButtonEventListener() {
+  this.saveTodoButton.addEventListener("click", (event) => {
   event.preventDefault();
 
   const selectedPriority = document.querySelector('input[name="priority"]:checked')
