@@ -4,12 +4,22 @@ import { saveToLocalStorage } from "../local-Storage";
 import { format } from 'date-fns';
 
 class ScreenController {
-  constructor(listCollection, listsContainer, listTitlesContainer, dialog, hiddenListIndex) {
+  constructor(listCollection) {
     this.listCollection = listCollection;
-    this.listsContainer = listsContainer;
-    this.listTitlesContainer = listTitlesContainer;
-    this.dialog = dialog;
-    this.hiddenListIndex = hiddenListIndex;
+    this.listsContainer = document.querySelector(".lists-container");
+    this.listTitlesContainer = document.querySelector(".js-list-titles");
+    this.dialog = document.querySelector(".js-todo-dialog");
+    this.hiddenListIndex = document.querySelector(".js-hidden-list-index");
+
+    this.newListButton = document.querySelector(".js-new-list-button");
+    this.newListInput = document.querySelector(".js-new-list-input");
+    
+    this.createTodoButton = document.querySelector(".js-create-todo-button")
+    
+    this.name = document.querySelector(".js-todo-name");
+    this.details = document.querySelector(".js-todo-details");
+    this.dueDate = document.querySelector(".js-todo-due-date");
+    this.formErrors = document.querySelector(".js-form-errors");
   }
 
   generateDefaultTodoList() {
@@ -129,6 +139,93 @@ class ScreenController {
       });
     });
   }
+
+  addNewListButtonEventListener() {
+    this.newListButton.addEventListener("click", (event) => {
+      event.preventDefault();
+
+    
+      if (this.newListInput.value === "") {
+        return alert("Input cannot be empty.");
+      }
+    
+      this.listCollection.addList(this.newListInput.value);
+      this.newListInput.value = "";
+      this.renderLists();
+      this.renderListTitles();
+    
+      saveToLocalStorage("list collection", this.listCollection);
+    })
+  }
+
+
+
+
+
+  validateFormInput(nameValue, dateValue) {
+  let errors = [];
+
+  if (nameValue === "") {
+    errors.push("Name is required.");
+  }
+
+  if (dateValue === "") {
+    errors.push("Due Date is required.");
+  }
+
+  return errors;
+}
+
+displayFormErrors(errors) {
+  let html = "";
+  errors.forEach((error) => { html += `<p>${error}</p>` });
+  return html;
+}
+
+isFormInputValid(nameValue, dateValue) {
+  this.formErrors.innerHTML = "";
+  let valid = true;
+
+  const errors = this.validateFormInput(nameValue, dateValue);
+
+  if (errors.length > 0) {
+    this.formErrors.innerHTML = this.displayFormErrors(errors);
+    valid = false;
+  }
+
+  return valid;
+}
+
+addCreateTodoButtonEventListener() {
+  this.createTodoButton.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  const priority = document.querySelector('input[name="priority"]:checked')
+
+  if(!this.isFormInputValid(this.name.value, this.dueDate.value)) {
+    return;
+  }
+
+
+ /*  console.log(this.dueDate.value); */
+  console.log(priority.value);
+
+  this.listCollection.all[this.hiddenListIndex.value].addTodo(this.name.value, this.details.value, new Date(this.dueDate.value), priority.value);
+
+  this.name.value = "";
+  this.details.value = "";
+  this.dueDate.value = "";
+  document.querySelector('input[name="priority"][value="low"]').checked = true;
+  this.dialog.close();
+
+  this.renderLists();
+  this.renderListTitles();
+
+  saveToLocalStorage("list collection", this.listCollection);
+});
+}
+
+  
 };
 
 export default ScreenController;
