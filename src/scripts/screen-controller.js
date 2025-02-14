@@ -15,7 +15,7 @@ class ScreenController {
     this.newListButton = document.querySelector(".js-new-list-button");
     this.newListInput = document.querySelector(".js-new-list-input");
     
-    this.createTodoButton = document.querySelector(".js-create-todo-button")
+    this.createTodoButton = document.querySelector(".js-save-todo-button")
     
     this.todoNameInput = document.querySelector(".js-todo-name");
     this.todoDetailsInput = document.querySelector(".js-todo-details");
@@ -37,6 +37,7 @@ class ScreenController {
   buildUI() {
     this.renderLists();
     this.renderListTitles();
+    this.dialog.addEventListener("close", () => { this.renderTodoFormWith();});
     this.addNewListButtonEventListener()
     this.addCreateTodoButtonEventListener();
   }
@@ -58,21 +59,15 @@ class ScreenController {
     const editTodoButtons = document.querySelectorAll(".js-edit-todo-button");
     editTodoButtons.forEach((editTodoButton) => {
       editTodoButton.addEventListener("click", () => {
-
         const todo = this.listCollection.all[editTodoButton.dataset.listIndex].todos[editTodoButton.dataset.todoIndex];
-        console.log(todo);
-        console.log(todo.dueDate);
-        console.log(typeof(todo.dueDate));
-
         this.dialog.showModal();
-
         this.renderTodoFormWith({todo: todo, listIndex: editTodoButton.dataset.listIndex, todoIndex: editTodoButton.dataset.todoIndex});
         
         /* when dialog is save Form input needs to be validated and saved */
       });
     });
   };
-
+  
   renderListTitles() {
     this.listTitlesContainer.innerHTML = "";
     this.listCollection.all.forEach((list) => {
@@ -211,8 +206,6 @@ addCreateTodoButtonEventListener() {
   }
 
   this.listCollection.all[this.hiddenListIndex.value].addTodo(this.todoNameInput.value, this.todoDetailsInput.value, new Date(this.todoDueDateInput.value), selectedPriority.value);
-
-  this.renderTodoFormWith();
 
   this.dialog.close();
 
