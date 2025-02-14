@@ -24,7 +24,11 @@ function initializeListCollection() {
     listCollection.all = listCollection.all.map((listData) => {
       const list = Object.assign(new TodoList(), listData);
       
-      list.todos = list.todos.map((todoData) => Object.assign(new Todo(), todoData));
+      list.todos = list.todos.map((todoData) => {
+        const todo = Object.assign(new Todo(), todoData);
+        todo.dueDate = new Date(todo.dueDate);
+        return todo;
+      });
       return list;
     });
     return listCollection;
