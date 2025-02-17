@@ -47,7 +47,14 @@ class ScreenController {
     this.listsContainer.innerHTML = this.generateAllListsHtml(this.listCollection.all);
 
     const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
-    this.addEventListeners(deleteListButtons, this.listCollection.deleteList.bind(this.listCollection));
+    deleteListButtons.forEach((deleteListButton) => {
+      deleteListButton.addEventListener("click", () => {
+        this.listCollection.deleteList(deleteListButton.dataset.listIndex);
+        this.renderLists();
+        this.renderListTitles();
+        saveToLocalStorage("list collection", this.listCollection);
+      });
+    });
 
     const newTodoButtons = document.querySelectorAll(".js-new-todo-button");
     newTodoButtons.forEach((newTodoButton) => {
@@ -128,17 +135,6 @@ class ScreenController {
             </div>`;
   };
 
-  addEventListeners(nodeList, action) {
-    nodeList.forEach((node) => {
-      node.addEventListener("click", () => {
-        action(node.dataset.listIndex);
-        this.renderLists();
-        this.renderListTitles();
-        saveToLocalStorage("list collection", this.listCollection);
-      });
-    });
-  }
-
   addNewListButtonEventListener() {
     this.newListButton.addEventListener("click", (event) => {
       event.preventDefault();
@@ -157,10 +153,6 @@ class ScreenController {
     })
   }
 
-
-
-
-
   validateFormInput(nameValue, dateValue) {
   let errors = [];
 
@@ -175,74 +167,69 @@ class ScreenController {
   return errors;
 }
 
-displayFormErrors(errors) {
-  let html = "";
-  errors.forEach((error) => { html += `<p>${error}</p>` });
-  return html;
-}
-
-isFormInputValid(nameValue, dateValue) {
-  this.todoFormErrors.innerHTML = "";
-  let valid = true;
-
-  const errors = this.validateFormInput(nameValue, dateValue);
-
-  if (errors.length > 0) {
-    this.todoFormErrors.innerHTML = this.displayFormErrors(errors);
-    valid = false;
+  displayFormErrors(errors) {
+    let html = "";
+    errors.forEach((error) => { html += `<p>${error}</p>` });
+    return html;
   }
 
-  return valid;
-}
+  isFormInputValid(nameValue, dateValue) {
+    this.todoFormErrors.innerHTML = "";
+    let valid = true;
+
+    const errors = this.validateFormInput(nameValue, dateValue);
+
+    if (errors.length > 0) {
+      this.todoFormErrors.innerHTML = this.displayFormErrors(errors);
+      valid = false;
+    }
+
+    return valid;
+  }
 
 
-renderTodoFormWith({todo = {name: "", details: "", dueDate: "", priority: "low" }, listIndex = "", todoIndex = ""} = {}) {
-  this.hiddenListIndex.value = listIndex;
-  this.hiddenTodoIndex.value = todoIndex;
-  this.todoNameInput.value = todo.name;
-  this.todoDetailsInput.value = todo.details;
-  this.todoDueDateInput.value = todo.dueDate instanceof Date ? format(todo.dueDate, "yyyy-MM-dd") : todo.dueDate;
+  renderTodoFormWith({todo = {name: "", details: "", dueDate: "", priority: "low" }, listIndex = "", todoIndex = ""} = {}) {
+    this.hiddenListIndex.value = listIndex;
+    this.hiddenTodoIndex.value = todoIndex;
+    this.todoNameInput.value = todo.name;
+    this.todoDetailsInput.value = todo.details;
+    this.todoDueDateInput.value = todo.dueDate instanceof Date ? format(todo.dueDate, "yyyy-MM-dd") : todo.dueDate;
 
+    this.todoPriorityRadioInputs.forEach(radio => {
+        if (radio.value === todo.priority) {
+          radio.checked = true;
+        }
+    });
+  };
 
-  
-  this.todoPriorityRadioInputs.forEach(radio => {
-      if (radio.value === todo.priority) {
-        radio.checked = true;
+  addSaveTodoButtonEventListener() {
+    this.saveTodoButton.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const selectedPriority = document.querySelector('input[name="priority"]:checked')
+
+      if(!this.isFormInputValid(this.todoNameInput.value, this.todoDueDateInput.value)) {
+        return;
       }
-  });
-};
 
-addSaveTodoButtonEventListener() {
-  this.saveTodoButton.addEventListener("click", (event) => {
-  event.preventDefault();
+      if (this.listCollection.all[this.hiddenListIndex.value].todos[this.hiddenTodoIndex.value]) {
+        const todoInEdit = this.listCollection.all[this.hiddenListIndex.value].todos[this.hiddenTodoIndex.value];
+        todoInEdit.name = this.todoNameInput.value;
+        todoInEdit.details = this.todoDetailsInput.value;
+        todoInEdit.dueDate = new Date(this.todoDueDateInput.value);
+        todoInEdit.priority = selectedPriority.value;
+      } else {
+        this.listCollection.all[this.hiddenListIndex.value].addTodo(this.todoNameInput.value, this.todoDetailsInput.value, new Date(this.todoDueDateInput.value), selectedPriority.value);
+      }
 
-  const selectedPriority = document.querySelector('input[name="priority"]:checked')
+      this.dialog.close();
 
-  if(!this.isFormInputValid(this.todoNameInput.value, this.todoDueDateInput.value)) {
-    return;
+      this.renderLists();
+      this.renderListTitles();
+
+      saveToLocalStorage("list collection", this.listCollection);
+    });
   }
-
-  if (this.listCollection.all[this.hiddenListIndex.value].todos[this.hiddenTodoIndex.value]) {
-    const todoInEdit = this.listCollection.all[this.hiddenListIndex.value].todos[this.hiddenTodoIndex.value];
-    todoInEdit.name = this.todoNameInput.value;
-    todoInEdit.details = this.todoDetailsInput.value;
-    todoInEdit.dueDate = new Date(this.todoDueDateInput.value);
-    todoInEdit.priority = selectedPriority.value;
-  } else {
-    this.listCollection.all[this.hiddenListIndex.value].addTodo(this.todoNameInput.value, this.todoDetailsInput.value, new Date(this.todoDueDateInput.value), selectedPriority.value);
-  }
-
-  this.dialog.close();
-
-  this.renderLists();
-  this.renderListTitles();
-
-  saveToLocalStorage("list collection", this.listCollection);
-});
-
-}
-
-  
 };
 
 export default ScreenController;
