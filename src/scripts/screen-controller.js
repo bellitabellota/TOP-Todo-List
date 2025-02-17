@@ -47,7 +47,6 @@ class ScreenController {
     this.listsContainer.innerHTML = this.generateAllListsHtml(this.listCollection.all);
 
     this.addEventListenerForDeleteList();
-
     this.addEventListenerForNewTodo();
     this.addEventListenerForEditTodo();
     this.addEventListenerForRemoveTodo();
@@ -57,7 +56,9 @@ class ScreenController {
     const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
     deleteListButtons.forEach((deleteListButton) => {
       deleteListButton.addEventListener("click", () => {
-        this.listCollection.deleteList(deleteListButton.dataset.listIndex);
+        const listIndex = deleteListButton.dataset.listIndex;
+        this.listCollection.deleteList(listIndex);
+        
         this.renderLists();
         this.renderListTitles();
         saveToLocalStorage("list collection", this.listCollection);
