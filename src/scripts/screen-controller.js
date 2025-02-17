@@ -87,9 +87,12 @@ class ScreenController {
     const editTodoButtons = document.querySelectorAll(".js-edit-todo-button");
     editTodoButtons.forEach((editTodoButton) => {
       editTodoButton.addEventListener("click", () => {
-        const todo = this.listCollection.all[editTodoButton.dataset.listIndex].todos[editTodoButton.dataset.todoIndex];
+        const todoIndex = editTodoButton.dataset.todoIndex;
+        const listIndex = editTodoButton.dataset.listIndex;
+        const todo = this.listCollection.all[listIndex].todos[todoIndex];
+
         this.dialog.showModal();
-        this.renderTodoFormWith({todo: todo, listIndex: editTodoButton.dataset.listIndex, todoIndex: editTodoButton.dataset.todoIndex});
+        this.renderTodoFormWith({todo: todo, listIndex: listIndex, todoIndex: todoIndex});
       });
     });
   }
