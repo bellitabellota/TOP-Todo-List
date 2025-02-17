@@ -58,7 +58,7 @@ class ScreenController {
       deleteListButton.addEventListener("click", () => {
         const listIndex = deleteListButton.dataset.listIndex;
         this.listCollection.deleteList(listIndex);
-        
+
         this.renderLists();
         this.renderListTitles();
         saveToLocalStorage("list collection", this.listCollection);
@@ -71,7 +71,8 @@ class ScreenController {
     removeTodoButtons.forEach((removeTodoButton) => {
       removeTodoButton.addEventListener("click", () => {
         const todoIndex = removeTodoButton.dataset.todoIndex;
-        const todos = this.listCollection.all[removeTodoButton.dataset.listIndex].todos;
+        const listIndex = removeTodoButton.dataset.listIndex;
+        const todos = this.listCollection.all[listIndex].todos;
 
         todos.splice(todoIndex, 1);
           
