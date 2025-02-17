@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo</title>
+<script defer src="main.js"></script></head>
+<body>
+  <header>
+    <p class="slogan">Stay Organized!</p>
+  </header>
+
+  <aside>
+    <form>
+      <input type="text" class="new-list-input js-new-list-input">
+      <input type="submit" class="new-list-button js-new-list-button" value="New List">
+    </form>
+    <h2>All Lists</h2>
+    <div class="js-list-titles"></div>
+  </aside>
+
+  <main>
+    <div class="lists-container">
+    </div>
+    <dialog class="js-todo-dialog">
+      <form>
+        <div class="js-form-errors"></div>
+        <input type="hidden" class="js-hidden-list-index">
+        <input type="hidden" class="js-hidden-todo-index">
+        <label for="name">Name*:</label>
+        <input type="text" id="name" class="js-todo-name"><br>
+  
+        <label for="details">Details:</label><br>
+        <textarea id="details" class="js-todo-details"></textarea><br>
+  
+        <label for="due-date">Due Date*:</label>
+        <input type="date" id="due-date" class="js-todo-due-date"><br><br>
+
+        <p>Priority*:</p>
+        <input type="radio" id="low" name="priority" value="low" checked>
+        <label for="low">low</label><br>
+        <input type="radio" id="medium" name="priority" value="medium">
+        <label for="medium">medium</label><br>
+        <input type="radio" id="high" name="priority" value="high">
+        <label for="high">high</label><br>
+  
+        <input type="submit" class="js-save-todo-button" value="Save Todo">
+        <p>Input for fields with * are obligatory.</p>
+      </form>
+    </dialog>
+  </main>
+  
+</body>
+</html>
