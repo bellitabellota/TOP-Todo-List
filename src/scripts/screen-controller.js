@@ -59,9 +59,7 @@ class ScreenController {
         const listIndex = deleteListButton.dataset.listIndex;
         this.listCollection.deleteList(listIndex);
 
-        this.renderLists();
-        this.renderListTitles();
-        saveToLocalStorage("list collection", this.listCollection);
+        this.renderAndSave();
       });
     });
   }
@@ -76,9 +74,7 @@ class ScreenController {
 
         todos.splice(todoIndex, 1);
           
-        this.renderLists();
-        this.renderListTitles();
-        saveToLocalStorage("list collection", this.listCollection);
+        this.renderAndSave();
       });
     });
   }
@@ -157,17 +153,13 @@ class ScreenController {
     this.newListButton.addEventListener("click", (event) => {
       event.preventDefault();
 
-    
       if (this.newListInput.value === "") {
         return alert("Input cannot be empty.");
       }
     
       this.listCollection.addList(this.newListInput.value);
       this.newListInput.value = "";
-      this.renderLists();
-      this.renderListTitles();
-    
-      saveToLocalStorage("list collection", this.listCollection);
+      this.renderAndSave();
     })
   }
 
@@ -205,7 +197,6 @@ class ScreenController {
     return valid;
   }
 
-
   renderTodoFormWith({todo = {name: "", details: "", dueDate: "", priority: "low" }, listIndex = "", todoIndex = ""} = {}) {
     this.hiddenListIndex.value = listIndex;
     this.hiddenTodoIndex.value = todoIndex;
@@ -224,9 +215,7 @@ class ScreenController {
     this.saveTodoButton.addEventListener("click", (event) => {
       event.preventDefault();
 
-      if(!this.isFormInputValid(this.todoNameInput.value, this.todoDueDateInput.value)) {
-        return;
-      }
+      if(!this.isFormInputValid(this.todoNameInput.value, this.todoDueDateInput.value)) { return; }
 
       const listIndex = this.hiddenListIndex.value;
       const todoIndex = this.hiddenTodoIndex.value;
@@ -245,11 +234,15 @@ class ScreenController {
 
       this.dialog.close();
 
-      this.renderLists();
-      this.renderListTitles();
-
-      saveToLocalStorage("list collection", this.listCollection);
+      this.renderAndSave();
     });
+  }
+
+  renderAndSave() {
+    this.renderLists();
+    this.renderListTitles();
+
+    saveToLocalStorage("list collection", this.listCollection);
   }
 };
 
