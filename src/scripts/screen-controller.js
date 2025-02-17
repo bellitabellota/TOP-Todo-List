@@ -224,20 +224,23 @@ class ScreenController {
     this.saveTodoButton.addEventListener("click", (event) => {
       event.preventDefault();
 
-      const selectedPriority = document.querySelector('input[name="priority"]:checked')
-
       if(!this.isFormInputValid(this.todoNameInput.value, this.todoDueDateInput.value)) {
         return;
       }
 
-      if (this.listCollection.all[this.hiddenListIndex.value].todos[this.hiddenTodoIndex.value]) {
-        const todoInEdit = this.listCollection.all[this.hiddenListIndex.value].todos[this.hiddenTodoIndex.value];
+      const listIndex = this.hiddenListIndex.value;
+      const todoIndex = this.hiddenTodoIndex.value;
+      const list = this.listCollection.all[listIndex];
+      const todoInEdit = list.todos[todoIndex];
+      const selectedPriority = document.querySelector('input[name="priority"]:checked');
+      
+      if (todoInEdit) {
         todoInEdit.name = this.todoNameInput.value;
         todoInEdit.details = this.todoDetailsInput.value;
         todoInEdit.dueDate = new Date(this.todoDueDateInput.value);
         todoInEdit.priority = selectedPriority.value;
       } else {
-        this.listCollection.all[this.hiddenListIndex.value].addTodo(this.todoNameInput.value, this.todoDetailsInput.value, new Date(this.todoDueDateInput.value), selectedPriority.value);
+        list.addTodo(this.todoNameInput.value, this.todoDetailsInput.value, new Date(this.todoDueDateInput.value), selectedPriority.value);
       }
 
       this.dialog.close();
