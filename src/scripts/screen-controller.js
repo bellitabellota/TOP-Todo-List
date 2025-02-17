@@ -46,6 +46,14 @@ class ScreenController {
   renderLists() {
     this.listsContainer.innerHTML = this.generateAllListsHtml(this.listCollection.all);
 
+    this.addEventListenerForDeleteList();
+
+    this.addEventListenerForNewTodo();
+    this.addEventListenerForEditTodo();
+    this.addEventListenerForRemoveTodo();
+  };
+
+  addEventListenerForDeleteList(){
     const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
     deleteListButtons.forEach((deleteListButton) => {
       deleteListButton.addEventListener("click", () => {
@@ -55,15 +63,25 @@ class ScreenController {
         saveToLocalStorage("list collection", this.listCollection);
       });
     });
+  }
 
-    const newTodoButtons = document.querySelectorAll(".js-new-todo-button");
-    newTodoButtons.forEach((newTodoButton) => {
-      newTodoButton.addEventListener("click", () => {
-        this.hiddenListIndex.value = newTodoButton.dataset.listIndex;
-        this.dialog.showModal();
+  addEventListenerForRemoveTodo() {
+    const removeTodoButtons = document.querySelectorAll(".js-remove-todo-button");
+    removeTodoButtons.forEach((removeTodoButton) => {
+      removeTodoButton.addEventListener("click", () => {
+        const todoIndex = removeTodoButton.dataset.todoIndex;
+        const todos = this.listCollection.all[removeTodoButton.dataset.listIndex].todos;
+
+        todos.splice(todoIndex, 1);
+          
+        this.renderLists();
+        this.renderListTitles();
+        saveToLocalStorage("list collection", this.listCollection);
       });
     });
+  }
 
+  addEventListenerForEditTodo() {
     const editTodoButtons = document.querySelectorAll(".js-edit-todo-button");
     editTodoButtons.forEach((editTodoButton) => {
       editTodoButton.addEventListener("click", () => {
@@ -72,22 +90,17 @@ class ScreenController {
         this.renderTodoFormWith({todo: todo, listIndex: editTodoButton.dataset.listIndex, todoIndex: editTodoButton.dataset.todoIndex});
       });
     });
+  }
 
-    const removeTodoButtons = document.querySelectorAll(".js-remove-todo-button");
-    removeTodoButtons.forEach((removeTodoButton) => {
-      removeTodoButton.addEventListener("click", () => {
-        const todoIndex = removeTodoButton.dataset.todoIndex;
-        const todos = this.listCollection.all[removeTodoButton.dataset.listIndex].todos;
-
-        todos.splice(todoIndex, 1);
-        
-        this.renderLists();
-        this.renderListTitles();
-        saveToLocalStorage("list collection", this.listCollection);
-        
+  addEventListenerForNewTodo() {
+    const newTodoButtons = document.querySelectorAll(".js-new-todo-button");
+    newTodoButtons.forEach((newTodoButton) => {
+      newTodoButton.addEventListener("click", () => {
+        this.hiddenListIndex.value = newTodoButton.dataset.listIndex;
+        this.dialog.showModal();
       });
     });
-  };
+  }
   
   renderListTitles() {
     this.listTitlesContainer.innerHTML = "";
