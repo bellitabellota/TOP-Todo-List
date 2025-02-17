@@ -36,35 +36,35 @@ class ScreenController {
   }
 
   buildUI() {
-    this.renderLists();
-    this.renderListTitles();
-    this.dialog.addEventListener("close", () => { this.renderTodoFormWith();});
-    this.addNewListButtonEventListener()
-    this.addSaveTodoButtonEventListener();
+    this.#renderLists();
+    this.#renderListTitles();
+    this.dialog.addEventListener("close", () => { this.#renderTodoFormWith();});
+    this.#addNewListButtonEventListener()
+    this.#addSaveTodoButtonEventListener();
   }
 
-  renderLists() {
-    this.listsContainer.innerHTML = this.generateAllListsHtml(this.listCollection.all);
+  #renderLists() {
+    this.listsContainer.innerHTML = this.#generateAllListsHtml(this.listCollection.all);
 
-    this.addEventListenerForDeleteList();
-    this.addEventListenerForNewTodo();
-    this.addEventListenerForEditTodo();
-    this.addEventListenerForRemoveTodo();
+    this.#addEventListenerForDeleteList();
+    this.#addEventListenerForNewTodo();
+    this.#addEventListenerForEditTodo();
+    this.#addEventListenerForRemoveTodo();
   };
 
-  addEventListenerForDeleteList(){
+  #addEventListenerForDeleteList(){
     const deleteListButtons = document.querySelectorAll(".js-delete-list-button");
     deleteListButtons.forEach((deleteListButton) => {
       deleteListButton.addEventListener("click", () => {
         const listIndex = deleteListButton.dataset.listIndex;
         this.listCollection.deleteList(listIndex);
 
-        this.renderAndSave();
+        this.#renderAndSave();
       });
     });
   }
 
-  addEventListenerForRemoveTodo() {
+  #addEventListenerForRemoveTodo() {
     const removeTodoButtons = document.querySelectorAll(".js-remove-todo-button");
     removeTodoButtons.forEach((removeTodoButton) => {
       removeTodoButton.addEventListener("click", () => {
@@ -74,12 +74,12 @@ class ScreenController {
 
         todos.splice(todoIndex, 1);
           
-        this.renderAndSave();
+        this.#renderAndSave();
       });
     });
   }
 
-  addEventListenerForEditTodo() {
+  #addEventListenerForEditTodo() {
     const editTodoButtons = document.querySelectorAll(".js-edit-todo-button");
     editTodoButtons.forEach((editTodoButton) => {
       editTodoButton.addEventListener("click", () => {
@@ -88,12 +88,12 @@ class ScreenController {
         const todo = this.listCollection.all[listIndex].todos[todoIndex];
 
         this.dialog.showModal();
-        this.renderTodoFormWith({todo: todo, listIndex: listIndex, todoIndex: todoIndex});
+        this.#renderTodoFormWith({todo: todo, listIndex: listIndex, todoIndex: todoIndex});
       });
     });
   }
 
-  addEventListenerForNewTodo() {
+  #addEventListenerForNewTodo() {
     const newTodoButtons = document.querySelectorAll(".js-new-todo-button");
     newTodoButtons.forEach((newTodoButton) => {
       newTodoButton.addEventListener("click", () => {
@@ -103,7 +103,7 @@ class ScreenController {
     });
   }
   
-  renderListTitles() {
+  #renderListTitles() {
     this.listTitlesContainer.innerHTML = "";
     this.listCollection.all.forEach((list) => {
       const listTitleElement = document.createElement("p");
@@ -112,20 +112,20 @@ class ScreenController {
     });
   };
 
-  generateAllListsHtml(lists) {
+  #generateAllListsHtml(lists) {
     let listHTML = "";
 
     lists.forEach((list, listIndex) => {
       let listBodyHtml = "";
-      list.todos.forEach( (todo, todoIndex) => listBodyHtml += this.generateTodoHtml(todo, listIndex, todoIndex));
+      list.todos.forEach( (todo, todoIndex) => listBodyHtml += this.#generateTodoHtml(todo, listIndex, todoIndex));
 
-      listHTML += this.generateListHtml(list, listIndex, listBodyHtml);
+      listHTML += this.#generateListHtml(list, listIndex, listBodyHtml);
     })
 
     return listHTML;
   };
 
-  generateListHtml(list, listIndex, listBodyHtml) {
+  #generateListHtml(list, listIndex, listBodyHtml) {
     return `<div class="list">
             <div class="list-heading-container">
               <h2>${list.name}</h2>
@@ -137,7 +137,7 @@ class ScreenController {
           </div>`;
   };
 
-  generateTodoHtml(todo, listIndex, todoIndex) {
+  #generateTodoHtml(todo, listIndex, todoIndex) {
     return `<div class="todo ${todo.priority}">
               <p class="todo-name">${todo.name}</p>
               <p class="todo-due-date">${format(todo.dueDate, "dd-MM-yyy")}</p>
@@ -149,7 +149,7 @@ class ScreenController {
             </div>`;
   };
 
-  addNewListButtonEventListener() {
+  #addNewListButtonEventListener() {
     this.newListButton.addEventListener("click", (event) => {
       event.preventDefault();
 
@@ -159,11 +159,11 @@ class ScreenController {
     
       this.listCollection.addList(this.newListInput.value);
       this.newListInput.value = "";
-      this.renderAndSave();
+      this.#renderAndSave();
     })
   }
 
-  validateFormInput(nameValue, dateValue) {
+  #validateFormInput(nameValue, dateValue) {
   let errors = [];
 
   if (nameValue === "") {
@@ -177,27 +177,27 @@ class ScreenController {
   return errors;
 }
 
-  displayFormErrors(errors) {
+  #displayFormErrors(errors) {
     let html = "";
     errors.forEach((error) => { html += `<p>${error}</p>` });
     return html;
   }
 
-  isFormInputValid(nameValue, dateValue) {
+  #isFormInputValid(nameValue, dateValue) {
     this.todoFormErrors.innerHTML = "";
     let valid = true;
 
-    const errors = this.validateFormInput(nameValue, dateValue);
+    const errors = this.#validateFormInput(nameValue, dateValue);
 
     if (errors.length > 0) {
-      this.todoFormErrors.innerHTML = this.displayFormErrors(errors);
+      this.todoFormErrors.innerHTML = this.#displayFormErrors(errors);
       valid = false;
     }
 
     return valid;
   }
 
-  renderTodoFormWith({todo = {name: "", details: "", dueDate: "", priority: "low" }, listIndex = "", todoIndex = ""} = {}) {
+  #renderTodoFormWith({todo = {name: "", details: "", dueDate: "", priority: "low" }, listIndex = "", todoIndex = ""} = {}) {
     this.hiddenListIndex.value = listIndex;
     this.hiddenTodoIndex.value = todoIndex;
     this.todoNameInput.value = todo.name;
@@ -211,11 +211,11 @@ class ScreenController {
     });
   };
 
-  addSaveTodoButtonEventListener() {
+  #addSaveTodoButtonEventListener() {
     this.saveTodoButton.addEventListener("click", (event) => {
       event.preventDefault();
 
-      if(!this.isFormInputValid(this.todoNameInput.value, this.todoDueDateInput.value)) { return; }
+      if(!this.#isFormInputValid(this.todoNameInput.value, this.todoDueDateInput.value)) { return; }
 
       const listIndex = this.hiddenListIndex.value;
       const todoIndex = this.hiddenTodoIndex.value;
@@ -234,13 +234,13 @@ class ScreenController {
 
       this.dialog.close();
 
-      this.renderAndSave();
+      this.#renderAndSave();
     });
   }
 
-  renderAndSave() {
-    this.renderLists();
-    this.renderListTitles();
+  #renderAndSave() {
+    this.#renderLists();
+    this.#renderListTitles();
 
     saveToLocalStorage("list collection", this.listCollection);
   }
